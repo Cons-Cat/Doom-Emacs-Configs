@@ -121,9 +121,9 @@
    (kbd "k") 'evil-paste-after
 
    ;; Buffer splitting
-   (kbd "{" 'delete-other-windows)
-   (kbd "}" 'split-window-right)
-   (kbd "w" 'xah-next-window-or-frame)
+   (kbd "{") 'delete-other-windows
+   (kbd "}") 'split-window-right
+   (kbd "w") 'xah-next-window-or-frame
 
    ;; Other
    (kbd "'") 'comment-line
