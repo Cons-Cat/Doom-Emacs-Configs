@@ -2,7 +2,14 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
+(setq tab-bar-mode t)
+(setq custom-tab-width 3)
+(setq tab-jump-out-mode t)
+(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+;; (setq global-visual-line-mode t)
+;; (add-hook! 'text-mode-hook 'turn-on-visual-line-mode)
 
+;; Magit
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -21,6 +28,13 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+(setq doom-font (font-spec :family "Operator Mono Lig Medium" :size 9.5)
+      doom-big-font (font-spec :family "Operator Mono Lig Medium" :size 20)
+)
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic)
+)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -33,6 +47,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type 'relative)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -50,25 +65,13 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-(setq display-line-numbers-type 'relative)
-(setq tab-bar-mode t)
-(setq custom-tab-width 3)
-(setq tab-jump-out-mode t)
+(fset 'evil-visual-update-x-selection 'ignore)
 
-;; Text prettifying
-(setq doom-font (font-spec :family "Operator Mono Lig Medium" :size 9.5)
-      doom-big-font (font-spec :family "Operator Mono Lig Medium" :size 20)
-)
-(custom-set-faces!
-  '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic)
-)
-
+;; Loading packages
 (global-set-key [backspace] 'evil-normal-state) ;; Backspace
-;; This package is loaded manually, because Doom's package! macro doesn't seem to treat it properly.
+;; XFK is loaded manually, because Doom's package! macro doesn't seem to treat it properly.
 (load! "xah-fly-keys.el")
 (load! "pony-fly-keys.el")
-;; (load! "smart-operator.el")
 
 (after! evil
 ;; (use-package-hook! evil      ;; This seems to cause a failure to load at start-up, but works after doom sync.
@@ -112,13 +115,20 @@
    (kbd "+") 'xah-select-block
    (kbd "]") 'xah-select-text-in-quote
 
+   ;; Clipboard
+   (kbd "q") 'xah-cut-all-or-region
+   (kbd "j") 'kill-ring-save
+   (kbd "k") 'evil-paste-after
+
+   ;; Buffer splitting
+   (kbd "{" 'delete-other-windows)
+   (kbd "}" 'split-window-right)
+   (kbd "w" 'xah-next-window-or-frame)
+
    ;; Other
    (kbd "'") 'comment-line
    (kbd "f") 'evil-undo
    (kbd "F") 'evil-redo
-   (kbd "q") 'xah-cut-all-or-region
-   (kbd "j") 'kill-ring-save
-   (kbd "k") 'evil-paste-after
    (kbd "O") 'evil-join
    (kbd "o") 'evil-insert-newline-below
    (kbd ";") 'evil-record-macro
@@ -145,11 +155,32 @@
    (kbd "+") 'xah-select-block
    (kbd "]") 'xah-select-text-in-quote
 
-   ;; Deletion
+    ;; Clipboard
+   (kbd "q") 'xah-cut-all-or-region
+   (kbd "j") 'kill-ring-save
+   (kbd "k") 'evil-paste-after
+
+  ;; Deletion
    (kbd "e") 'smart-hungry-delete-backward-char
    )
 
  ;; Leader Key
  (map! :leader "a" 'mark-whole-buffer)
  (map! :leader "s" 'exchange-point-and-mark)
+ (map! :leader "d" 'beginning-of-buffer)
+ (map! :leader "b" 'end-of-buffer)
+
+ (map! :leader "{" 'delete-window)
+ (map! :leader "}" 'split-window-below)
+ (map! :leader "tb" 'quit-window)
+
+ ;; Embracing
+ (map! :leader "eh" 'xah-insert-brace)
+ (map! :leader "et" 'xah-insert-paren)
+ (map! :leader "en" 'xah-insert-square-bracket)
+ (map! :leader "eg" 'xah-insert-ascii-double-quote)
+ (map! :leader "ec" 'xah-insert-ascii-single-quote)
+
+ ;; File Commands
+ (map! :leader "ca" 'magit-status)
 )
