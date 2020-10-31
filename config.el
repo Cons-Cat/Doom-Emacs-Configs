@@ -158,7 +158,7 @@
    (kbd "w") 'xah-next-window-or-frame
 
    ;; Other
-   (kbd "'") 'comment-line
+   (kbd "'") 'xah-comment-dwim
    (kbd "f") 'evil-undo
    (kbd "F") 'evil-redo
    (kbd "O") 'evil-join
@@ -202,6 +202,7 @@
 
    ;; Other
    (kbd "'") 'comment-line
+   (kbd "y") 'evil-exit-visual-state
    )
 
  ;; Leader Key
