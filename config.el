@@ -12,15 +12,15 @@
  ivy-posframe-mode t
 )
 
-;; Magit
-(defun magit-display-buffer-pop-up-frame (buffer)
-  (if (with-current-buffer buffer (eq major-mode 'magit-status-mode))
-      (display-buffer buffer
-                      '((display-buffer-reuse-window
-                         display-buffer-pop-up-frame)
-                        (reusable-frames . t)))
-    (magit-display-buffer-traditional buffer)))
-(setq magit-display-buffer-function #'magit-display-buffer-pop-up-frame)
+;; ;; Magit
+;; (defun magit-display-buffer-pop-up-frame (buffer)
+;;   (if (with-current-buffer buffer (eq major-mode 'magit-status-mode))
+;;       (display-buffer buffer
+;;                       '((display-buffer-reuse-window
+;;                          display-buffer-pop-up-frame)
+;;                         (reusable-frames . t)))
+;;     (magit-display-buffer-traditional buffer)))
+;; (setq magit-display-buffer-function #'magit-display-buffer-pop-up-frame)
 
 ;; Ivy
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
@@ -31,6 +31,22 @@
 ;; clients, file templates and snippets.
 (setq user-full-name "William Gooch"
       user-mail-address "wgooch2000@gmail.com")
+
+;; Centaur
+(after! centaur-tabs
+  :post-config
+  (setq
+   centaur-tabs-style "wave"
+   centaur-tabs-set-bar 'under
+   centaur-tabs-set-icons t
+   centaur-tabs-icon-scale-factor 0.65
+   centaur-tabs-set-modified-marker nil
+   centaur-tabs-set-close-button nil
+   centaur-tabs-gray-out-icons 'buffer
+   centaur-tabs-bar-height 48
+   )
+  (centaur-tabs-change-fonts "InputSerifCompressed Black" 90)
+)
 
 ;; doom exposes five (optional) variables for controlling fonts in doom. here
 ;; are the three important ones:

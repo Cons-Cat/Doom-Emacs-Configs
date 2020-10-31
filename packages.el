@@ -8,6 +8,7 @@
 (package! evil-snipe :disable t)
 (package! tab-jump-out)
 (package! ivy-posframe)
+(package! centaur-tabs)
 
 ;; For reasons unknown to me, this package does not seem to load properly.
 (package! xah-fly-keys)
