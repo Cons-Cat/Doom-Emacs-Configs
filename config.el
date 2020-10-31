@@ -2,21 +2,37 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
-(setq tab-bar-mode t)
-(setq custom-tab-width 3)
-(setq tab-jump-out-mode t)
-(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
-;; (setq global-visual-line-mode t)
-;; (add-hook! 'text-mode-hook 'turn-on-visual-line-mode)
+(setq-default
+ ;; setq-hook! 'text-mode-hook tab-jump-out-mode t
+ ;; (add-hook! 'text-mode-hook 'turn-on-visual-line-mode)
+ tab-jump-out-mode t
+ tab-width 3
+ electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit
+ global-visual-line-mode t
+ ivy-posframe-mode t
+)
 
 ;; Magit
+(defun magit-display-buffer-pop-up-frame (buffer)
+  (if (with-current-buffer buffer (eq major-mode 'magit-status-mode))
+      (display-buffer buffer
+                      '((display-buffer-reuse-window
+                         display-buffer-pop-up-frame)
+                        (reusable-frames . t)))
+    (magit-display-buffer-traditional buffer)))
+(setq magit-display-buffer-function #'magit-display-buffer-pop-up-frame)
+
+;; Ivy
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
+;; (setq-hook! 'text-mode-hook ivy-posframe-mode t)
+;; (ivy-posframe-border ((t (:background "#ffffff"))))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "William Gooch"
       user-mail-address "wgooch2000@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
+;; doom exposes five (optional) variables for controlling fonts in doom. here
 ;; are the three important ones:
 ;;
 ;; + `doom-font'
@@ -24,12 +40,12 @@
 ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
 ;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
+;; they all accept either a font-spec, font string ("input mono-12"), or xlfd
+;; font string. you generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "Operator Mono Lig Medium" :size 9.5)
-      doom-big-font (font-spec :family "Operator Mono Lig Medium" :size 20)
+(setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
+      doom-big-font (font-spec :family "operator mono lig medium" :size 20)
 )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
@@ -135,7 +151,12 @@
    )
 
  (evil-declare-key 'visual global-map
-  ;; Navigation
+    ;; Modes
+   (kbd "u") 'evil-insert-state
+   (kbd "a") 'counsel-M-x
+   (kbd "y") 'evil-visual-state
+
+   ;; Navigation
    (kbd "H") 'subword-backward
    (kbd "h") 'backward-word
    (kbd "N") 'subword-forward
@@ -155,13 +176,16 @@
    (kbd "+") 'xah-select-block
    (kbd "]") 'xah-select-text-in-quote
 
-    ;; Clipboard
+   ;; Clipboard
    (kbd "q") 'xah-cut-all-or-region
    (kbd "j") 'kill-ring-save
    (kbd "k") 'evil-paste-after
 
-  ;; Deletion
+   ;; Deletion
    (kbd "e") 'smart-hungry-delete-backward-char
+
+   ;; Other
+   (kbd "'") 'comment-line
    )
 
  ;; Leader Key
@@ -169,6 +193,9 @@
  (map! :leader "s" 'exchange-point-and-mark)
  (map! :leader "d" 'beginning-of-buffer)
  (map! :leader "b" 'end-of-buffer)
+ (map! :leader "." 'evil-delete-back-to-indentation)
+ (map! :leader "p" 'evil-delete-line)
+ ;; (map! :leader ";" 'format!)
 
  (map! :leader "{" 'delete-window)
  (map! :leader "}" 'split-window-below)
@@ -183,4 +210,6 @@
 
  ;; File Commands
  (map! :leader "ca" 'magit-status)
+ (map! :leader "cs" 'save-buffer)
+ (map! :leader "c." 'dired)
 )
