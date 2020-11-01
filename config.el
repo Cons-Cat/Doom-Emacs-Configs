@@ -94,8 +94,8 @@
 ;; font string. you generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "operator mono lig medium" :size 9.0)
-      doom-big-font (font-spec :family "operator mono lig medium" :size 20)
+(setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
+      doom-big-font (font-spec :family "operator mono lig medium" :size 13.5)
 )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
