@@ -165,10 +165,14 @@
    (kbd "g") 'evil-backward-char
    (kbd "t") 'evil-next-line
    (kbd "c") 'evil-previous-line
+   (kbd "T") 'next-line
+   (kbd "C") 'previous-line
    (kbd "d") 'xah-beginning-of-line-or-block
    (kbd "s") 'xah-end-of-line-or-block
    (kbd "D") 'pony-binary-beginning-of-line
    (kbd "S") 'pony-binary-end-of-line
+   (kbd "m") 'xah-backward-left-bracket
+   (kbd "v") 'xah-forward-right-bracket
 
    ;; Deletion
    (kbd "e") 'smart-hungry-delete-backward-char
@@ -219,10 +223,14 @@
    (kbd "g") 'evil-backward-char
    (kbd "t") 'evil-next-line
    (kbd "c") 'evil-previous-line
+   (kbd "T") 'next-line
+   (kbd "C") 'previous-line
    (kbd "d") 'xah-beginning-of-line-or-block
    (kbd "s") 'xah-end-of-line-or-block
    (kbd "D") 'pony-binary-beginning-of-line
    (kbd "S") 'pony-binary-end-of-line
+   (kbd "m") 'xah-backward-left-bracket
+   (kbd "v") 'xah-forward-right-bracket
 
    ;; Selection
    (kbd "*") 'xah-select-line
@@ -245,9 +253,9 @@
 
  ;; Leader Key
  (map! :leader "a" 'mark-whole-buffer)
- (map! :leader "s" 'exchange-point-and-mark)
+ (map! :leader "b" 'exchange-point-and-mark)
  (map! :leader "d" 'beginning-of-buffer)
- (map! :leader "b" 'end-of-buffer)
+ (map! :leader "s" 'end-of-buffer)
  (map! :leader "." 'evil-delete-back-to-indentation)
  (map! :leader "p" 'evil-delete-line)
  ;; (map! :leader ";" 'format!)
