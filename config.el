@@ -2,15 +2,10 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
-(setq-default
- ;; setq-hook! 'text-mode-hook tab-jump-out-mode t
- ;; (add-hook! 'text-mode-hook 'turn-on-visual-line-mode)
- tab-jump-out-mode t
- tab-width 3
- electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit
- global-visual-line-mode t
- ivy-posframe-mode t
-)
+(setq! tab-width 3)
+(display-time-mode t)
+(global-visual-line-mode t)
+;; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 
 ;; ;; Magit
 ;; (defun magit-display-buffer-pop-up-frame (buffer)
@@ -24,8 +19,24 @@
 
 ;; Ivy
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
-;; (setq-hook! 'text-mode-hook ivy-posframe-mode t)
-;; (ivy-posframe-border ((t (:background "#ffffff"))))
+(use-package! ivy-posframe
+  :hook (ivy-mode . ivy-posframe-mode)
+  :init
+  :config
+  (setq!
+   cursor-type 'bar
+  )
+  )
+(setq ivy-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))
+
+;; Tab Jump-Out
+(use-package! tab-jump-out
+  ;; :hook (text-mode . tab-jump-out-mode)
+  :init (tab-jump-out-mode)
+  )
+;; (setq yas-fallback-behavior '(apply tab-jump-out 1))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -33,9 +44,11 @@
       user-mail-address "wgooch2000@gmail.com")
 
 ;; Centaur
-(after! centaur-tabs
-  :post-config
-  (setq
+(use-package! centaur-tabs
+  :init
+  (centaur-tabs-mode)
+  :config
+  (setq!
    centaur-tabs-style "wave"
    centaur-tabs-set-bar 'under
    centaur-tabs-set-icons t
@@ -46,9 +59,30 @@
    centaur-tabs-bar-height 48
    )
   (centaur-tabs-change-fonts "InputSerifCompressed Black" 90)
-)
+  )
 
-;; doom exposes five (optional) variables for controlling fonts in doom. here
+;; Modeline
+(setq doom-modeline-height 0)           ; Modeline should be no taller than its text.
+;; Much of the following is taken from: https://github.com/sunnyhasija/Academic-Doom-Emacs-Config
+;; Display battery on laptops.
+(unless (equal "Battery status not available"
+               (battery))
+  (display-battery-mode 1))
+;; Display encoding when not UTF-8.
+(defun doom-modeline-conditional-buffer-encoding ()
+  (setq-local doom-modeline-buffer-encoding
+              (unless (or (eq buffer-file-coding-system 'utf-8-unix)
+                          (eq buffer-file-coding-system 'utf-8)))))
+(add-hook 'after-change-major-mode-hook #'doom-modeline-conditional-buffer-encoding)
+;; Hide the Windows titlebar
+(setq default-frame-alist '((undecorated . t)))
+;; Display current project
+(setq doom-modeline-project-detection 'project)
+(setq doom-modeline-env-version t)
+(setq doom-modeline-enable-word-count nil)
+(setq doom-modeline-modal-icon t)
+
+;; doom exposes five (op:barctional) variables for controlling fonts in doom. here
 ;; are the three important ones:
 ;;
 ;; + `doom-font'
@@ -60,12 +94,16 @@
 ;; font string. you generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
+(setq doom-font (font-spec :family "operator mono lig medium" :size 9.0)
       doom-big-font (font-spec :family "operator mono lig medium" :size 20)
 )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic)
+  '(mode-line :family "InputSerifCompressed Black" :height 0.9)
+  '(mode-line-inactive :family "InputSerifCompressed Black" :height 0.9)
+  '(ivy-posframe-border :background "violet")
+  ;; '(ivy-posframe-cursor :cursor-color "FFFFFF")
 )
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -227,6 +265,6 @@
 
  ;; File Commands
  (map! :leader "ca" 'magit-status)
- (map! :leader "cs" 'save-buffer)
+ (map! :leader "cs" 'evil-save)
  (map! :leader "c." 'dired)
 )
