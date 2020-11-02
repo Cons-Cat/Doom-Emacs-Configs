@@ -9,6 +9,7 @@
  x-stretch-cursor t
  )
 
+(setq! x-stretch-cursor t)
 (display-time-mode t)
 (global-visual-line-mode t)
 (global-subword-mode t)
@@ -105,6 +106,7 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
       doom-big-font (font-spec :family "operator mono lig medium" :size 13.5)
+      doom-unicode-font (font-spec :family "overpass mono bold" :size 13)
 )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
@@ -132,9 +134,9 @@
         '(
           (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
           ;; (newline-mark 10 [8629 30]) ; LINE FEED,
-          (newline-mark 10 [?¬ 10])
+          (newline-mark 10 [?↵ 10])
           ;; (tab-mark 9 [8677 9] [92 30]) ; tab
-          (tab-mark ?\t [?› ?\t])
+          (tab-mark ?\t [?⇥ ?\t])
           ))
   )
 
