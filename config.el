@@ -9,7 +9,6 @@
  x-stretch-cursor t
  )
 
-(setq! x-stretch-cursor t)
 (display-time-mode t)
 (global-visual-line-mode t)
 (global-subword-mode t)
@@ -119,8 +118,7 @@
 )
 
 ;; Whitespace
-;; (after! whitespace-mode
-(global-whitespace-mode +1)
+;; (global-whitespace-mode +1)
 (use-package! whitespace
   :config
 ; (progn
@@ -143,6 +141,18 @@
 (setq default-tab-width 3)
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+
+(use-package! highlight-indent-guides
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :init
+  :config
+  (setq
+   highlight-indent-guides-method 'bitmap
+   highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line
+   highlight-indent-guides-responsive 'stack
+   highlight-indent-guides-delay 0
+   )
+)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -314,3 +324,5 @@
  (map! :leader "cs" 'evil-save)
  (map! :leader "c." 'dired)
 )
+
+(setq! x-stretch-cursor t)

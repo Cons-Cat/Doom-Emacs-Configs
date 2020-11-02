@@ -9,6 +9,7 @@
 (package! tab-jump-out)
 (package! ivy-posframe)
 (package! centaur-tabs)
+(package! highlight-indent-guides)
 
 ;; For reasons unknown to me, this package does not seem to load properly.
 (package! xah-fly-keys)
