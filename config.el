@@ -2,12 +2,21 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
-(setq! tab-width 3)
+;; (setq! tab-width 3)
+(setq-default
+ delete-by-moving-to-trash t
+ tab-width 3
+ x-stretch-cursor t
+ )
+
 (display-time-mode t)
 (global-visual-line-mode t)
+(global-subword-mode t)
 ;; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 
 ;; ;; Magit
+;;
+;; This block gives Magit a pop-up frame.
 ;; (defun magit-display-buffer-pop-up-frame (buffer)
 ;;   (if (with-current-buffer buffer (eq major-mode 'magit-status-mode))
 ;;       (display-buffer buffer
@@ -29,7 +38,7 @@
   )
 (setq ivy-posframe-parameters
       '((left-fringe . 8)
-        (right-fringe . 8)))
+	(right-fringe . 8)))
 
 ;; Tab Jump-Out
 (use-package! tab-jump-out
@@ -103,8 +112,35 @@
   '(mode-line :family "InputSerifCompressed Black" :height 0.9)
   '(mode-line-inactive :family "InputSerifCompressed Black" :height 0.9)
   '(ivy-posframe-border :background "violet")
+  '(whitespace-tab :background nil)     ; Do not highlight indentation.
   ;; '(ivy-posframe-cursor :cursor-color "FFFFFF")
 )
+
+;; Whitespace
+;; (after! whitespace-mode
+(global-whitespace-mode +1)
+(use-package! whitespace
+  :config
+; (progn
+ ;; Make whitespace-mode with very basic background coloring for whitespaces.
+  ;; http://ergoemacs.org/emacs/whitespace-mode.html
+  (setq
+        whitespace-style '(face spaces space-mark tabs tab-mark newline newline-mark trailing)
+        ;; Make whitespace-mode and whitespace-newline-mode use “↵" for end of line char and “⇥" for tab.
+        whitespace-display-mappings
+        ;; all numbers are unicode codepoint in decimal. e.g. (insert-char 182 1)
+        '(
+          (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+          ;; (newline-mark 10 [8629 30]) ; LINE FEED,
+          (newline-mark 10 [?¬ 10])
+          ;; (tab-mark 9 [8677 9] [92 30]) ; tab
+          (tab-mark ?\t [?› ?\t])
+          ))
+  )
+
+(setq default-tab-width 3)
+(defvaralias 'c-basic-offset 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -183,7 +219,7 @@
    (kbd "P") 'subword-kill
    (kbd ",") 'xah-shrink-whitespaces
 
-   ;; Selection
+;; Selection
    (kbd "*") 'xah-select-line
    (kbd ")") 'er/mark-word
    (kbd "+") 'xah-select-block
