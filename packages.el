@@ -10,8 +10,9 @@
 (package! ivy-posframe)
 (package! centaur-tabs)
 (package! highlight-indent-guides)
+(package! sublimity)
 
-;; For reasons unknown to me, this package does not seem to load properly.
+;; For reasons unknown to me, these packages only load locally.
 (package! xah-fly-keys)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:

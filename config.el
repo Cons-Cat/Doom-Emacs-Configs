@@ -12,7 +12,15 @@
 (display-time-mode t)
 (global-visual-line-mode t)
 (global-subword-mode t)
-;; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+                                        ; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+
+;; Sublimity
+(sublimity-mode t)
+(use-package! sublimity-scroll
+  :config
+  (setq sublimity-scroll-weight 2
+      sublimity-scroll-drift-length 1)
+)
 
 ;; ;; Magit
 ;;
@@ -105,7 +113,7 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
       doom-big-font (font-spec :family "operator mono lig medium" :size 13.5)
-      doom-unicode-font (font-spec :family "overpass mono bold" :size 13)
+      doom-unicode-font (font-spec :family "overpass mono bold" :size 8)
 )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
@@ -113,12 +121,14 @@
   '(mode-line :family "InputSerifCompressed Black" :height 0.9)
   '(mode-line-inactive :family "InputSerifCompressed Black" :height 0.9)
   '(ivy-posframe-border :background "violet")
-  '(whitespace-tab :background nil)     ; Do not highlight indentation.
+  '(whitespace-tab :foreground "#282A36" :background nil)     ; Do not highlight indentation.
+  '(whitespace-space :background "#282A36" :foreground "#282A36")
+  '(whitespace-newline :foreground "#282A36")
   ;; '(ivy-posframe-cursor :cursor-color "FFFFFF")
 )
 
 ;; Whitespace
-;; (global-whitespace-mode +1)
+(global-whitespace-mode t)
 (use-package! whitespace
   :config
 ; (progn
@@ -138,7 +148,7 @@
           ))
   )
 
-(setq default-tab-width 3)
+(setq default-tab-width 2)              ; My favored width is 3. 1 is subtracted to fix incompatibility between whitespace-mode and highlight-indent-guides mode.
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
@@ -187,9 +197,9 @@
 
 ;; Loading packages
 (global-set-key [backspace] 'evil-normal-state) ;; Backspace
-;; XFK is loaded manually, because Doom's package! macro doesn't seem to treat it properly.
-(load! "xah-fly-keys.el")
 (load! "pony-fly-keys.el")
+;; The following are loaded manually, because Doom's package! macro doesn't seem to treat it properly.
+(load! "xah-fly-keys.el")
 
 (after! evil
 ;; (use-package-hook! evil      ;; This seems to cause a failure to load at start-up, but works after doom sync.
@@ -231,7 +241,7 @@
    (kbd "P") 'subword-kill
    (kbd ",") 'xah-shrink-whitespaces
 
-;; Selection
+   ;; Selection
    (kbd "*") 'xah-select-line
    (kbd ")") 'er/mark-word
    (kbd "+") 'xah-select-block
@@ -312,17 +322,24 @@
  (map! :leader "}" 'split-window-below)
  (map! :leader "tb" 'quit-window)
 
+ ;; Scrolling
+ (map! :leader "tt" 'evil-scroll-page-down)
+ (map! :leader "tT" 'zz-scroll-half-page-down)
+ (map! :leader "tc" 'evil-scroll-page-up)
+ (map! :leader "tC" 'zz-scroll-half-page-up)
+ (map! :leader "tw" 'evil-scroll-line-to-center)
+
  ;; Embracing
  (map! :leader "eh" 'xah-insert-brace)
  (map! :leader "et" 'xah-insert-paren)
  (map! :leader "en" 'xah-insert-square-bracket)
  (map! :leader "eg" 'xah-insert-ascii-double-quote)
  (map! :leader "ec" 'xah-insert-ascii-single-quote)
+ (map! :leader "er" 'xah-insert-angle-bracket)
 
  ;; File Commands
  (map! :leader "ca" 'magit-status)
  (map! :leader "cs" 'evil-save)
  (map! :leader "c." 'dired)
+ (map! :leader "cn" 'xah-new-empty-buffer)
 )
-
-(setq! x-stretch-cursor t)
