@@ -76,3 +76,57 @@
       (goto-char $p1))
     )
   )
+
+(defun pony-copy-current-line()
+  (interactive)
+  (let ( $p1 $p2 )
+    (beginning-of-line)
+    (skip-chars-forward "\t ")
+    (setq $p1 (point))
+    ;;
+    (re-search-forward "\n")
+    (setq $p2 (point))
+    ;;
+    (copy-region-as-kill $p1 $p2)
+    (nav-flash-show $p1 $p2)
+    )
+  )
+
+(defun pony-mark-line()
+  (interactive)
+  (if (region-active-p)
+      ;; Expand selection in the direction of cursor
+      ;; if a mark already exists.
+      (progn
+        (if (equal (point) (region-end))
+            (progn
+              (re-search-forward "\n")
+              (skip-chars-forward "\t ")
+              )
+          ;;
+          (progn
+            (beginning-of-line)
+            (skip-chars-backward "\t\n ")
+            (beginning-of-line)
+            (skip-chars-forward "\t ")
+            )
+          )
+        )
+    ;; Mark the beginning of leading whitespace to
+    ;; the end of current line, including the newline.
+        (progn
+            (let ( $p1 $p2 )
+              (beginning-of-line)
+              (skip-chars-forward "\t ")
+              (setq $p1 (point))
+              ;;
+              (re-search-forward "\n")
+              (skip-chars-forward "\t ")
+              (backward-char 1)
+              (setq $p2 (point))
+              ;;
+              (set-mark $p1)
+              )
+            )
+          )
+  )

@@ -18,10 +18,10 @@
 
 ;; Code formatting
 ;; (use-package! format-all
-  ;; :hook (prog-mode . 'format-all-mode)
-  ;; :init
-  ;; :config
-  ;; )
+;; :hook (prog-mode . 'format-all-mode)
+;; :init
+;; :config
+;; )
 
 ;; Sublimity
 (sublimity-mode t)
@@ -252,7 +252,7 @@
     (kbd ",") 'xah-shrink-whitespaces
 
     ;; Selection
-    (kbd "*") 'xah-select-line
+    (kbd "*") 'pony-mark-line
     (kbd ")") 'er/mark-word
     (kbd "+") 'xah-select-block
     (kbd "]") 'xah-select-text-in-quote
@@ -301,7 +301,7 @@
     (kbd "v") 'xah-forward-right-bracket
 
     ;; Selection
-    (kbd "*") 'xah-select-line
+    (kbd "*") 'pony-mark-line
     (kbd ")") 'er/mark-word
     (kbd "+") 'xah-select-block
     (kbd "]") 'xah-select-text-in-quote
@@ -312,7 +312,7 @@
     (kbd "k") 'xah-paste-or-paste-previous
 
     ;; Deletion
-    (kbd "e") 'smart-hungry-delete-backward-char
+    (kbd "e") 'evil-delete
 
     ;; Other
     (kbd "'") 'comment-line
