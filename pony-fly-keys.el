@@ -42,3 +42,16 @@
     "Scrolls exactly half page up keeping cursor/point position."
     (interactive)
     (zz-scroll-half-page t))
+
+(defun pony-insert-region-pair()
+  (interactive)
+  (let ((open "#region\n")
+        (close "#endregion\n"))      ; Default kind of region
+        (cond ((equal major-mode 'emacs-lisp-mode) (setq open "; region\n") (setq close "; endregion\n")
+               )
+              ((equal major-mode 'c++-mode) (setq open "#pragma region\n") (setq close "#pragma endregion\n")
+               )
+              )
+        (xah-insert-bracket-pair open close)
+  )
+  )

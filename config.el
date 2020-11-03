@@ -336,7 +336,8 @@
  (map! :leader "en" 'xah-insert-square-bracket)
  (map! :leader "eg" 'xah-insert-ascii-double-quote)
  (map! :leader "ec" 'xah-insert-ascii-single-quote)
- (map! :leader "er" 'xah-insert-angle-bracket)
+ (map! :leader "er" 'pony-insert-region-pair)
+ ;; (map! :leader "el" 'xah-insert-angle-bracket) ; These are not <> brackets.
 
  ;; File Commands
  (map! :leader "ca" 'magit-status)
