@@ -9,18 +9,27 @@
  x-stretch-cursor t
  )
 
+                                        ; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (display-time-mode t)
 (global-visual-line-mode t)
 (global-subword-mode t)
-                                        ; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+(format-all-mode t)
+(rainbow-delimiters-mode t)
+
+;; Code formatting
+;; (use-package! format-all
+  ;; :hook (prog-mode . 'format-all-mode)
+  ;; :init
+  ;; :config
+  ;; )
 
 ;; Sublimity
 (sublimity-mode t)
 (use-package! sublimity-scroll
   :config
   (setq sublimity-scroll-weight 2
-      sublimity-scroll-drift-length 1)
-)
+        sublimity-scroll-drift-length 1)
+  )
 
 ;; ;; Magit
 ;;
@@ -42,7 +51,7 @@
   :config
   (setq!
    cursor-type 'bar
-  )
+   )
   )
 (setq ivy-posframe-parameters
       '((left-fringe . 8)
@@ -114,7 +123,7 @@
 (setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
       doom-big-font (font-spec :family "operator mono lig medium" :size 13.5)
       doom-unicode-font (font-spec :family "overpass mono bold" :size 8)
-)
+      )
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic)
@@ -125,27 +134,27 @@
   '(whitespace-space :background "#282A36" :foreground "#282A36")
   '(whitespace-newline :foreground "#282A36")
   ;; '(ivy-posframe-cursor :cursor-color "FFFFFF")
-)
+  )
 
 ;; Whitespace
 (global-whitespace-mode t)
 (use-package! whitespace
   :config
-; (progn
- ;; Make whitespace-mode with very basic background coloring for whitespaces.
+                                        ; (progn
+  ;; Make whitespace-mode with very basic background coloring for whitespaces.
   ;; http://ergoemacs.org/emacs/whitespace-mode.html
   (setq
-        whitespace-style '(face spaces space-mark tabs tab-mark newline newline-mark trailing)
-        ;; Make whitespace-mode and whitespace-newline-mode use “↵" for end of line char and “⇥" for tab.
-        whitespace-display-mappings
-        ;; all numbers are unicode codepoint in decimal. e.g. (insert-char 182 1)
-        '(
-          (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
-          ;; (newline-mark 10 [8629 30]) ; LINE FEED,
-          (newline-mark 10 [?↵ 10])
-          ;; (tab-mark 9 [8677 9] [92 30]) ; tab
-          (tab-mark ?\t [?⇥ ?\t])
-          ))
+   whitespace-style '(face spaces space-mark tabs tab-mark newline newline-mark trailing)
+   ;; Make whitespace-mode and whitespace-newline-mode use “↵" for end of line char and “⇥" for tab.
+   whitespace-display-mappings
+   ;; all numbers are unicode codepoint in decimal. e.g. (insert-char 182 1)
+   '(
+     (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+     ;; (newline-mark 10 [8629 30]) ; LINE FEED,
+     (newline-mark 10 [?↵ 10])
+     ;; (tab-mark 9 [8677 9] [92 30]) ; tab
+     (tab-mark ?\t [?⇥ ?\t])
+     ))
   )
 
 (setq default-tab-width 2)              ; My favored width is 3. 1 is subtracted to fix incompatibility between whitespace-mode and highlight-indent-guides mode.
@@ -162,7 +171,7 @@
    highlight-indent-guides-responsive 'stack
    highlight-indent-guides-delay 0
    )
-)
+  )
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -198,150 +207,152 @@
 ;; Loading packages
 (global-set-key [backspace] 'evil-normal-state) ;; Backspace
 (load! "pony-fly-keys.el")
+(load! "nav-flash.el")
 ;; The following are loaded manually, because Doom's package! macro doesn't seem to treat it properly.
 (load! "xah-fly-keys.el")
 
 (after! evil
-;; (use-package-hook! evil      ;; This seems to cause a failure to load at start-up, but works after doom sync.
- :post-config
- (setq evil-move-beyond-eol t)
- (setq evil-cross-lines t)
- (setq evil-move-cursor-back nil)
+  ;; (use-package-hook! evil      ;; This seems to cause a failure to load at start-up, but works after doom sync.
+  :post-config
+  (setq evil-move-beyond-eol t)
+  (setq evil-cross-lines t)
+  (setq evil-move-cursor-back nil)
 
- (evil-declare-key 'normal global-map
-   ;; Modes
-   (kbd "u") 'evil-insert-state
-   (kbd "a") 'counsel-M-x
-   (kbd "y") 'evil-visual-state
-
-   ;; Navigation
-   (kbd "H") 'subword-backward
-   (kbd "h") 'backward-word
-   (kbd "N") 'subword-forward
-   (kbd "n") 'forward-word
-   (kbd "r") 'evil-forward-char
-   (kbd "g") 'evil-backward-char
-   (kbd "t") 'evil-next-line
-   (kbd "c") 'evil-previous-line
-   (kbd "T") 'next-line
-   (kbd "C") 'previous-line
-   (kbd "d") 'xah-beginning-of-line-or-block
-   (kbd "s") 'xah-end-of-line-or-block
-   (kbd "D") 'pony-binary-beginning-of-line
-   (kbd "S") 'pony-binary-end-of-line
-   (kbd "m") 'xah-backward-left-bracket
-   (kbd "v") 'xah-forward-right-bracket
-
-   ;; Deletion
-   (kbd "e") 'smart-hungry-delete-backward-char
-   (kbd "(") 'smart-hungry-delete-forward-char
-   (kbd ".") 'doom/delete-backward-word
-   (kbd "p") 'kill-word
-   (kbd ">") 'subword-backward-kill
-   (kbd "P") 'subword-kill
-   (kbd ",") 'xah-shrink-whitespaces
-
-   ;; Selection
-   (kbd "*") 'xah-select-line
-   (kbd ")") 'er/mark-word
-   (kbd "+") 'xah-select-block
-   (kbd "]") 'xah-select-text-in-quote
-
-   ;; Clipboard
-   (kbd "q") 'xah-cut-all-or-region
-   (kbd "j") 'kill-ring-save
-   (kbd "k") 'evil-paste-after
-
-   ;; Buffer splitting
-   (kbd "{") 'delete-other-windows
-   (kbd "}") 'split-window-right
-   (kbd "w") 'xah-next-window-or-frame
-
-   ;; Other
-   (kbd "'") 'xah-comment-dwim
-   (kbd "f") 'evil-undo
-   (kbd "F") 'evil-redo
-   (kbd "O") 'evil-join
-   (kbd "o") 'evil-insert-newline-below
-   (kbd ";") 'evil-record-macro
-   )
-
- (evil-declare-key 'visual global-map
+  (evil-declare-key 'normal global-map
     ;; Modes
-   (kbd "u") 'evil-insert-state
-   (kbd "a") 'counsel-M-x
-   (kbd "y") 'evil-visual-state
+    (kbd "u") 'evil-insert-state
+    (kbd "a") 'counsel-M-x
+    (kbd "y") 'evil-visual-state
 
-   ;; Navigation
-   (kbd "H") 'subword-backward
-   (kbd "h") 'backward-word
-   (kbd "N") 'subword-forward
-   (kbd "n") 'forward-word
-   (kbd "r") 'evil-forward-char
-   (kbd "g") 'evil-backward-char
-   (kbd "t") 'evil-next-line
-   (kbd "c") 'evil-previous-line
-   (kbd "T") 'next-line
-   (kbd "C") 'previous-line
-   (kbd "d") 'xah-beginning-of-line-or-block
-   (kbd "s") 'xah-end-of-line-or-block
-   (kbd "D") 'pony-binary-beginning-of-line
-   (kbd "S") 'pony-binary-end-of-line
-   (kbd "m") 'xah-backward-left-bracket
-   (kbd "v") 'xah-forward-right-bracket
+    ;; Navigation
+    (kbd "H") 'subword-backward
+    (kbd "h") 'backward-word
+    (kbd "N") 'subword-forward
+    (kbd "n") 'forward-word
+    (kbd "r") 'evil-forward-char
+    (kbd "g") 'evil-backward-char
+    (kbd "t") 'evil-next-line
+    (kbd "c") 'evil-previous-line
+    (kbd "T") 'next-line
+    (kbd "C") 'previous-line
+    (kbd "d") 'xah-beginning-of-line-or-block
+    (kbd "s") 'xah-end-of-line-or-block
+    (kbd "D") 'pony-binary-beginning-of-line
+    (kbd "S") 'pony-binary-end-of-line
+    (kbd "m") 'xah-backward-left-bracket
+    (kbd "v") 'xah-forward-right-bracket
 
-   ;; Selection
-   (kbd "*") 'xah-select-line
-   (kbd ")") 'er/mark-word
-   (kbd "+") 'xah-select-block
-   (kbd "]") 'xah-select-text-in-quote
+    ;; Deletion
+    (kbd "e") 'smart-hungry-delete-backward-char
+    (kbd "(") 'smart-hungry-delete-forward-char
+    (kbd ".") 'doom/delete-backward-word
+    (kbd "p") 'kill-word
+    (kbd ">") 'subword-backward-kill
+    (kbd "P") 'subword-kill
+    (kbd ",") 'xah-shrink-whitespaces
 
-   ;; Clipboard
-   (kbd "q") 'xah-cut-all-or-region
-   (kbd "j") 'kill-ring-save
-   (kbd "k") 'evil-paste-after
+    ;; Selection
+    (kbd "*") 'xah-select-line
+    (kbd ")") 'er/mark-word
+    (kbd "+") 'xah-select-block
+    (kbd "]") 'xah-select-text-in-quote
 
-   ;; Deletion
-   (kbd "e") 'smart-hungry-delete-backward-char
+    ;; Clipboard
+    (kbd "q") 'xah-cut-all-or-region
+    (kbd "j") 'pony-copy-current-word
+    (kbd "k") 'xah-paste-or-paste-previous
 
-   ;; Other
-   (kbd "'") 'comment-line
-   (kbd "y") 'evil-exit-visual-state
-   )
+    ;; Buffer splitting
+    (kbd "{") 'delete-other-windows
+    (kbd "}") 'split-window-right
+    (kbd "w") 'xah-next-window-or-frame
 
- ;; Leader Key
- (map! :leader "a" 'mark-whole-buffer)
- (map! :leader "b" 'exchange-point-and-mark)
- (map! :leader "d" 'beginning-of-buffer)
- (map! :leader "s" 'end-of-buffer)
- (map! :leader "." 'evil-delete-back-to-indentation)
- (map! :leader "p" 'evil-delete-line)
- ;; (map! :leader ";" 'format!)
+    ;; Other
+    (kbd "'") 'xah-comment-dwim
+    (kbd "f") 'evil-undo
+    (kbd "F") 'evil-redo
+    (kbd "O") 'evil-join
+    (kbd "o") 'evil-insert-newline-below
+    (kbd ";") 'evil-record-macro
+    )
 
- (map! :leader "{" 'delete-window)
- (map! :leader "}" 'split-window-below)
- (map! :leader "tb" 'quit-window)
+  (evil-declare-key 'visual global-map
+    ;; Modes
+    (kbd "u") 'evil-insert-state
+    (kbd "a") 'counsel-M-x
+    (kbd "y") 'evil-visual-state
 
- ;; Scrolling
- (map! :leader "tt" 'evil-scroll-page-down)
- (map! :leader "tT" 'zz-scroll-half-page-down)
- (map! :leader "tc" 'evil-scroll-page-up)
- (map! :leader "tC" 'zz-scroll-half-page-up)
- (map! :leader "tu" 'evil-scroll-line-to-center)
- (map! :leader "te" 'move-to-window-line-top-bottom)
+    ;; Navigation
+    (kbd "H") 'subword-backward
+    (kbd "h") 'backward-word
+    (kbd "N") 'subword-forward
+    (kbd "n") 'forward-word
+    (kbd "r") 'evil-forward-char
+    (kbd "g") 'evil-backward-char
+    (kbd "t") 'evil-next-line
+    (kbd "c") 'evil-previous-line
+    (kbd "T") 'next-line
+    (kbd "C") 'previous-line
+    (kbd "d") 'xah-beginning-of-line-or-block
+    (kbd "s") 'xah-end-of-line-or-block
+    (kbd "D") 'pony-binary-beginning-of-line
+    (kbd "S") 'pony-binary-end-of-line
+    (kbd "m") 'xah-backward-left-bracket
+    (kbd "v") 'xah-forward-right-bracket
 
- ;; Embracing
- (map! :leader "eh" 'xah-insert-brace)
- (map! :leader "et" 'xah-insert-paren)
- (map! :leader "en" 'xah-insert-square-bracket)
- (map! :leader "eg" 'xah-insert-ascii-double-quote)
- (map! :leader "ec" 'xah-insert-ascii-single-quote)
- (map! :leader "er" 'pony-insert-region-pair)
- ;; (map! :leader "el" 'xah-insert-angle-bracket) ; These are not <> brackets.
+    ;; Selection
+    (kbd "*") 'xah-select-line
+    (kbd ")") 'er/mark-word
+    (kbd "+") 'xah-select-block
+    (kbd "]") 'xah-select-text-in-quote
 
- ;; File Commands
- (map! :leader "ca" 'magit-status)
- (map! :leader "cs" 'evil-save)
- (map! :leader "c." 'dired)
- (map! :leader "cn" 'xah-new-empty-buffer)
-)
+    ;; Clipboard
+    (kbd "q") 'xah-cut-all-or-region
+    (kbd "j") 'kill-ring-save
+    (kbd "k") 'xah-paste-or-paste-previous
+
+    ;; Deletion
+    (kbd "e") 'smart-hungry-delete-backward-char
+
+    ;; Other
+    (kbd "'") 'comment-line
+    (kbd "y") 'evil-exit-visual-state
+    )
+
+  ;; Leader Key
+  (map! :leader "a" 'mark-whole-buffer)
+  (map! :leader "b" 'exchange-point-and-mark)
+  (map! :leader "d" 'beginning-of-buffer)
+  (map! :leader "s" 'end-of-buffer)
+  (map! :leader "." 'evil-delete-back-to-indentation)
+  (map! :leader "p" 'evil-delete-line)
+  (map! :leader "x" 'swiper)
+  ;; (map! :leader ";" 'format!)
+
+  (map! :leader "{" 'delete-window)
+  (map! :leader "}" 'split-window-below)
+  (map! :leader "tb" 'quit-window)
+
+  ;; Scrolling
+  (map! :leader "tt" 'evil-scroll-page-down)
+  (map! :leader "tT" 'zz-scroll-half-page-down)
+  (map! :leader "tc" 'evil-scroll-page-up)
+  (map! :leader "tC" 'zz-scroll-half-page-up)
+  (map! :leader "tu" 'evil-scroll-line-to-center)
+  (map! :leader "te" 'move-to-window-line-top-bottom)
+
+  ;; Embracing
+  (map! :leader "eh" 'xah-insert-brace)
+  (map! :leader "et" 'xah-insert-paren)
+  (map! :leader "en" 'xah-insert-square-bracket)
+  (map! :leader "eg" 'xah-insert-ascii-double-quote)
+  (map! :leader "ec" 'xah-insert-ascii-single-quote)
+  (map! :leader "er" 'pony-insert-region-pair)
+  ;; (map! :leader "el" 'xah-insert-angle-bracket) ; These are not <> brackets.
+
+  ;; File Commands
+  (map! :leader "ca" 'magit-status)
+  (map! :leader "cs" 'evil-save)
+  (map! :leader "c." 'dired)
+  (map! :leader "cn" 'xah-new-empty-buffer)
+  )
