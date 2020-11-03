@@ -123,7 +123,9 @@
 (setq doom-font (font-spec :family "operator mono lig medium" :size 9.5)
       doom-big-font (font-spec :family "operator mono lig medium" :size 13.5)
       doom-unicode-font (font-spec :family "overpass mono bold" :size 8)
+      doom-variable-pitch-font (font-spec :family "InputSerifCompressed Bold" :size 8.6)
       )
+
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic)
@@ -211,8 +213,16 @@
 ;; The following are loaded manually, because Doom's package! macro doesn't seem to treat it properly.
 (load! "xah-fly-keys.el")
 
+;; Neotree
+(after! neotree
+  :post-config
+  (evil-declare-key 'normal neotree-mode-map
+    (kbd "c") 'neotree-previous-line
+    (kbd "t") 'neotree-next-line
+    )
+  )
+
 (after! evil
-  ;; (use-package-hook! evil      ;; This seems to cause a failure to load at start-up, but works after doom sync.
   :post-config
   (setq evil-move-beyond-eol t)
   (setq evil-cross-lines t)
@@ -355,4 +365,5 @@
   (map! :leader "cs" 'evil-save)
   (map! :leader "c." 'dired)
   (map! :leader "cn" 'xah-new-empty-buffer)
+  (map! :leader "ch" 'neotree-toggle)
   )
