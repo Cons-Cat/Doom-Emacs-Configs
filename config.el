@@ -327,7 +327,8 @@
  (map! :leader "tT" 'zz-scroll-half-page-down)
  (map! :leader "tc" 'evil-scroll-page-up)
  (map! :leader "tC" 'zz-scroll-half-page-up)
- (map! :leader "tw" 'evil-scroll-line-to-center)
+ (map! :leader "tu" 'evil-scroll-line-to-center)
+ (map! :leader "te" 'move-to-window-line-top-bottom)
 
  ;; Embracing
  (map! :leader "eh" 'xah-insert-brace)
