@@ -338,6 +338,8 @@
   (map! :leader "." 'evil-delete-back-to-indentation)
   (map! :leader "p" 'evil-delete-line)
   (map! :leader "x" 'swiper)
+  (map! :leader "tp" 'evil-avy-goto-word-1)
+  (map! :leader "t." 'evil-avy-goto-line)
   ;; (map! :leader ";" 'format!)
 
   (map! :leader "{" 'delete-window)
