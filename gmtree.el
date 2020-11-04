@@ -6,6 +6,8 @@
         )
   )
 
+(add-hook 'gmtree-mode-hook 'centaur-tabs-local-mode)
+
 ;; ------------ Custom Variables -------------
 (defgroup gmtree nil
   "Options for GMTree."
@@ -65,13 +67,11 @@
     (interactive)
     (if (get-buffer gmtree-buffer-name)
         (progn
-          ;; Return the window.
-          ;; (message "Currently, do nothing.")
-          ;; (switch-to-buffer-other-window gmtree-buffer-name)
+          ;; Open the GMTree buffer which already exists.
           (display-buffer gmtree-buffer-name)
           (pop-to-buffer gmtree-buffer-name)
-          (message (format "%s" (window-dedicated-p)))
-          ;; (switch-to-buffer gmtree-buffer-name)
+          ;; (gmtree-mode)
+          ;; (message (format "%s" (window-dedicated-p)))
           )
 
       (progn
@@ -86,16 +86,19 @@
                                                                          (no-delete-other-windows . t)  ; Prevent GMTree from disappearing accidentally.
                                                                          (preserve-size . (nil, nil))   ; When closed, reopen with the same size.
                                                                          (dedicated . t)                ; Only allow this window to hold one buffer.
-                                                                         (mode . gmtree-mode)
+                                                                         ;; (mode . gmtree-mode)        ; This does not work.
                                                                          (allow-no-window . t)
                                                                          (slot . -1)                    ; Place at the top of side frames.
                                                                          )))
         ;; (switch-to-buffer buffer)
         ;; (set-window-parameter window 'no-delete-other-windows t)
-        (set-frame-selected-window nil window)
-        ;; (set-window-dedicated-p window t) ; t has a unique effect in this case, strongly-dedicating the window.
+        ;; (set-frame-selected-window nil window)
         ;; (gmtree-mode)
         ;;
+        (pop-to-buffer gmtree-buffer-name)
+        (gmtree-mode)
+        (set-window-dedicated-p window t) ; t has a unique effect in this case, strongly-dedicating the window.
+
         (message "Made Side Window.")
         )
       )
