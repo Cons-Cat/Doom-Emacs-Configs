@@ -210,6 +210,7 @@
 (global-set-key [backspace] 'evil-normal-state) ;; Backspace
 (load! "pony-fly-keys.el")
 (load! "nav-flash.el")
+(load! "gmtree.el")
 ;; The following are loaded manually, because Doom's package! macro doesn't seem to treat it properly.
 (load! "xah-fly-keys.el")
 
