@@ -1,4 +1,4 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; /config.el -*- lexical-binding: t ; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -7,9 +7,9 @@
  delete-by-moving-to-trash t
  tab-width 3
  x-stretch-cursor t
+ electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit
  )
 
-                                        ; (electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (display-time-mode t)
 (global-visual-line-mode t)
 (global-subword-mode t)
@@ -132,6 +132,7 @@
   '(mode-line :family "InputSerifCompressed Black" :height 0.9)
   '(mode-line-inactive :family "InputSerifCompressed Black" :height 0.9)
   '(ivy-posframe-border :background "violet")
+  '(which-key-posframe-border :background "violet")
   '(whitespace-tab :foreground "#282A36" :background nil)     ; Do not highlight indentation.
   '(whitespace-space :background "#282A36" :foreground "#282A36")
   '(whitespace-newline :foreground "#282A36")
@@ -175,6 +176,11 @@
    )
   )
 
+;; Words
+;; (modify-syntax-entry ?() "w")
+;; (modify-syntax-entry ?- "w")
+;; (modify-syntax-entry ?\; "w")
+
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -211,16 +217,33 @@
 (load! "pony-fly-keys.el")
 (load! "nav-flash.el")
 (load! "gmtree.el")
-;; The following are loaded manually, because Doom's package! macro doesn't seem to treat it properly.
+;; The following are loaded manually, because Doom's package! macro doesn't seem to treat them properly.
 (load! "xah-fly-keys.el")
+(load! "which-key-posframe.el")
 
-;; Neotree
-(after! neotree
-  :post-config
-  (evil-declare-key 'normal neotree-mode-map
-    (kbd "c") 'neotree-previous-line
-    (kbd "t") 'neotree-next-line
-    )
+;; ;; Neotree
+;; (after! neotree
+;;   :post-config
+;;   (evil-declare-key 'normal neotree-mode-map
+;;     (kbd "c") 'neotree-previous-line
+;;     (kbd "t") 'neotree-next-line
+;;     )
+;;   )
+
+;; Treemacs
+(after! treemacs
+  :config
+  :init
+  )
+
+(use-package! which-key-posframe
+  :config
+  (which-key-posframe-mode)
+  ;; :post-config
+  ;; (setq posframe-arghandler #'wjb/posframe-arghandler)
+;; (defun wjb/posframe-arghandler (buffer-or-name arg-name value)
+  ;; (let ((info '(:internal-border-width 2 :width 160 :height 12)))
+    ;; (or (plist-get info arg-name) value)))
   )
 
 (after! evil
@@ -331,6 +354,7 @@
     )
 
   ;; Leader Key
+  (map! :leader " " 'counsel-describe-symbol)
   (map! :leader "a" 'mark-whole-buffer)
   (map! :leader "b" 'exchange-point-and-mark)
   (map! :leader "d" 'beginning-of-buffer)
@@ -340,6 +364,7 @@
   (map! :leader "x" 'swiper)
   (map! :leader "tp" 'evil-avy-goto-word-1)
   (map! :leader "t." 'evil-avy-goto-line)
+  (map! :leader "y" 'counsel-evil-marks)
   ;; (map! :leader ";" 'format!)
 
   (map! :leader "{" 'delete-window)
@@ -366,7 +391,8 @@
   ;; File Commands
   (map! :leader "ca" 'magit-status)
   (map! :leader "cs" 'evil-save)
+  ;; (map! :leader "c." 'counsel-dired)
   (map! :leader "c." 'dired)
   (map! :leader "cn" 'xah-new-empty-buffer)
-  (map! :leader "ch" 'neotree-toggle)
+  (map! :leader "ch" '+treemacs/toggle)
   )

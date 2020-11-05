@@ -14,7 +14,8 @@
 (package! format-all)
 
 ;; For reasons unknown to me, these packages only load locally.
-(package! xah-fly-keys)
+;; (package! xah-fly-keys)
+;; (package! which-key-posframe)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
