@@ -130,3 +130,45 @@
             )
           )
   )
+
+(defun pony-delete-left-word()
+  (interactive)
+  (let ($pL $pR)
+    ;; If the cursor begins on a word.
+      (if (looking-at "[-_a-zA-Z0-9\$\#]*\.")
+          (progn
+            (setq skipChars 0)
+            ;; Place cursor in useful position relative to dots
+            (forward-char)
+            (if (looking-at "[.]")
+                (progn
+                  (setq skipChars 0)
+                  )
+              (progn
+                (setq skipChars 0)
+                )
+              )
+            (setq $pR (+ (point) skipChars))
+            ;; Move backwards to the end of the word.
+            (re-search-backward "[^-_a-zA-Z0-9\$\#]+[^\.]")
+            ;; Move off of white space.
+            (if (looking-at "[\s]")
+                (forward-char)
+              )
+            ;; Delete the word.
+            (delete-region (point) $pR)
+            )
+        (progn
+          ;; If the cursor begins on an operator.
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.]+")
+              (progn
+                (message "OPERATOR")
+                )
+            (progn
+              (message "NO")
+              )
+            )
+          )
+        )
+      )
+  )
