@@ -131,44 +131,56 @@
           )
   )
 
-(defun pony-delete-left-word()
+(defun pony-re-search-backward (argRegex)
+  (re-search-backward argRegex)
+  (if (looking-at "[\s\[\{\(\)\}\]]*")
+      (forward-char)
+    )
+  (point)
+  )
+
+(defun pony-re-search-forward (argRegex)
+  (re-search-forward argRegex)
+  (backward-char)
+  (point)
+)
+
+(defun pony-delete-left-word ()
   (interactive)
   (let ($pL $pR)
     ;; If the cursor begins on a word.
-      (if (looking-at "[-_a-zA-Z0-9\$\#]*\.")
+    ;;
+      (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
           (progn
-            (setq skipChars 0)
-            ;; Place cursor in useful position relative to dots
-            (forward-char)
-            (if (looking-at "[.]")
-                (progn
-                  (setq skipChars 0)
-                  )
-              (progn
-                (setq skipChars 0)
-                )
-              )
-            (setq $pR (+ (point) skipChars))
-            ;; Move backwards to the end of the word.
-            (re-search-backward "[^-_a-zA-Z0-9\$\#]+[^\.]")
-            ;; Move off of white space.
-            (if (looking-at "[\s]")
-                (forward-char)
-              )
-            ;; Delete the word.
-            (delete-region (point) $pR)
+            (setq temp (point))
+            (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9]"))
+            (goto-char temp)
+            (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#]+[^\.]"))
+            (message "WORD")
             )
+        ;; Else-If the cursor begins on an operator.
+        ;;
         (progn
-          ;; If the cursor begins on an operator.
-          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.]+")
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,]+")
               (progn
                 (message "OPERATOR")
+                ;; Move backwards to the end of the word.
+                (setq temp (point))
+                ;; (backward-char)
+                (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,]"))
+                (goto-char temp)
+                ;; (forward-char) =++=  ()
+                (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,]"))
                 )
+            ;; Else
             (progn
               (message "NO")
               )
             )
           )
         )
+        ;;
+        (goto-char $pL)
+        (set-mark $pR)
       )
   )
