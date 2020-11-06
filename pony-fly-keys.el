@@ -131,11 +131,18 @@
           )
   )
 
+;; (defvar pony-regex-word "[-_a-zA-Z0-9\$\#\.]+"
+;;   "Regex used for pony-finding discrete words."
+;;   )
+
+;; (defvar pony-regex-operator "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+"
+;;   "Regex used for pony-finding discrete operators."
+;;   )
+
 (defun pony-re-search-backward (argRegex)
+  (forward-char)
   (re-search-backward argRegex)
-  ;; (if (looking-at "[\s\[\{\(\)\}\]]")
-      (forward-char)
-    ;; )
+  (forward-char)
   (point)
   )
 
@@ -148,50 +155,48 @@
 (defun pony-delete-left-word ()
   (interactive)
   (let ($pL $pR)
+    (setq $exit nil)
+    (while (not $exit)
     ;; If the cursor begins on a word.
     ;;
       (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
           (progn
             (setq temp (point))
-            (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9]"))
+            (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9\$\#]"))
             (goto-char temp)
-            (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#]+[^\.]"))
-            (message "WORD")
-            ;; Prevent ending on brackets.
-            (when (looking-at "[\s(\s)]") (setq $pL (+ $pL 1)))
+            (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#][^\\.]"))
+            ;; Move cursor beyond . symbol.
+            (backward-char)
+            (if (looking-at "\\.") (setq $pL (- $pL 1)))
+            ;; Prevent ending on brackets or white-space.
+            (when (looking-at "\s(\s)\s- ") (setq $pL (+ $pL 1)))
+            (setq $exit t)
             )
         ;; Else-If the cursor begins on an operator.
         ;;
         (progn
           (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
               (progn
-                ;; Move backwards to the end of the word.
+                ;; Move backwards to the end of the operator.
                 (setq temp (point))
-                ;; (backward-char)
                 (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
                 (goto-char temp)
-                ;; ((forward-char[])) =++=      () [{]{]}]]]]
-                (setq $pL (- (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]") 0))
-                ;; (setq $pL (+ $pL 1))
-                )
-            ;; Else if the cursor starts on brackets
+                (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $exit t)
+            )
+            ;; Else, decrement cursor position.
             (progn
-              (setq temp (point))
-              (setq $pR (pony-re-search-forward "[a-zA-Z0-9\s\n]*"))
-              ;; (setq $pR (- $pR 1))
-             ;; (setq $pR (pony-re-search-forward "[^[\s(\s/\s)]]"))
-               (goto-char temp)
-              ;; () (setq $pL (pony-re-search-backward "[^\[\(\{\}\)\]\+]"))
-              ;; (setq $pL (pony-re-search-backward "[^[\s(\s/\s)]]"))
-               (setq $pL (pony-re-search-backward "[a-zA-Z0-9\s]+"))
-               ;; (setq $pL (+ $pL 1))
-               (message "NO")
+              (if (equal (point) (point-min))
+                  (user-error "Error. Hit start of buffer."))
+              (backward-char)
               )
             )
           )
         )
-        ;;
-        (goto-char $pL)
-        (set-mark $pR)
       )
+    ;;
+    ;; (goto-char $pL)
+    ;; (set-mark $pR)
+    (delete-region $pL $pR)
+    )
   )
