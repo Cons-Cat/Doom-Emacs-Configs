@@ -241,9 +241,9 @@
   (which-key-posframe-mode)
   ;; :post-config
   ;; (setq posframe-arghandler #'wjb/posframe-arghandler)
-;; (defun wjb/posframe-arghandler (buffer-or-name arg-name value)
+  ;; (defun wjb/posframe-arghandler (buffer-or-name arg-name value)
   ;; (let ((info '(:internal-border-width 2 :width 160 :height 12)))
-    ;; (or (plist-get info arg-name) value)))
+  ;; (or (plist-get info arg-name) value)))
   )
 
 (after! evil
@@ -260,9 +260,9 @@
 
     ;; Navigation
     (kbd "H") 'subword-backward
-    (kbd "h") 'backward-word
+    (kbd "h") 'pony-move-left-word
     (kbd "N") 'subword-forward
-    (kbd "n") 'forward-word
+    (kbd "n") 'pony-move-right-word
     (kbd "r") 'evil-forward-char
     (kbd "g") 'evil-backward-char
     (kbd "t") 'evil-next-line
@@ -279,8 +279,8 @@
     ;; Deletion
     (kbd "e") 'smart-hungry-delete-backward-char
     (kbd "(") 'smart-hungry-delete-forward-char
-    (kbd ".") 'doom/delete-backward-word
-    (kbd "p") 'kill-word
+    (kbd ".") 'pony-delete-left-word
+    (kbd "p") 'pony-delete-right-word
     (kbd ">") 'subword-backward-kill
     (kbd "P") 'subword-kill
     (kbd ",") 'xah-shrink-whitespaces

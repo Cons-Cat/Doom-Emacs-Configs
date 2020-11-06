@@ -168,6 +168,7 @@
             ;; Move cursor beyond . symbol.
             (backward-char)
             (if (looking-at "\\.") (setq $pL (- $pL 1)))
+            (forward-char)
             ;; Prevent ending on brackets or white-space.
             (when (looking-at "\s(\s)\s- ") (setq $pL (+ $pL 1)))
             (setq $exit t)
@@ -239,6 +240,83 @@
       )
     ;;
     (goto-char $pL)
-    ;; (set-mark $pR)
+    )
+  )
+
+(defun pony-delete-right-word ()
+  (interactive)
+  (let ($pL $pR)
+    (setq $exit nil)
+    (while (not $exit)
+    ;; If the cursor begins on a word.
+    ;;
+      (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
+          (progn
+            (setq temp (point))
+            (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9\$\#][^\\.]"))
+            (goto-char temp)
+            (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#]"))
+            (setq $exit t)
+            )
+        ;; Else-If the cursor begins on an operator.
+        ;;
+        (progn
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
+              (progn
+                ;; Move backwards to the end of the operator.
+                (setq temp (point))
+                (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (goto-char temp)
+                (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $exit t)
+            )
+            ;; Else, increment cursor position.
+            (progn
+              (if (equal (point) (point-max))
+                  (user-error "Error. Hit end of buffer."))
+              (forward-char)
+              )
+            )
+          )
+        )
+      )
+    ;;
+    (delete-region $pL $pR)
+    )
+  )
+
+(defun pony-move-right-word()
+  (interactive)
+  (let ($pR)
+    (setq $exit nil)
+    (while (not $exit)
+    ;; If the cursor begins on a word.
+    ;;
+      (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
+          (progn
+            (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9\$\#][^\\.]"))
+            (setq $exit t)
+            )
+        ;; Else-If the cursor begins on an operator.
+        ;;
+        (progn
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
+              (progn
+                ;; Move backwards to the end of the operator.
+                (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $exit t)
+            )
+            ;; Else, increment cursor position.
+            (progn
+              (if (equal (point) (point-max))
+                  (user-error "Error. Hit end of buffer."))
+              (forward-char)
+              )
+            )
+          )
+        )
+      )
+    ;;
+    (goto-char $pR)
     )
   )
