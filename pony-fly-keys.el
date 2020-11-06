@@ -156,6 +156,7 @@
   (interactive)
   (let ($pL $pR)
     (setq $exit nil)
+    (backward-char)
     (while (not $exit)
     ;; If the cursor begins on a word.
     ;;
@@ -214,7 +215,6 @@
             (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#][^\\.]"))
             ;; Move cursor beyond . symbol.
             (backward-char)
-            (if (looking-at "\\.") (setq $pL (- $pL 1)))
             ;; Prevent ending on brackets or white-space.
             (when (looking-at "\s(\s)\s- ") (setq $pL (+ $pL 1)))
             (setq $exit t)
@@ -266,6 +266,7 @@
                 ;; Move backwards to the end of the operator.
                 (setq temp (point))
                 (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $pR (+ $pR 1))
                 (goto-char temp)
                 (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
                 (setq $exit t)
@@ -297,11 +298,10 @@
           (progn
             (forward-char)
             (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9\$\#][^\\.]"))
-            (setq $pR (- $pR 2))
             ;; Prevent ending on brackets or white-space.
-            ;; (backward-char)
-            (when (looking-at "\s(\s)\s-\\. ") (setq $pR (- $pR 1)))
-            (setq $exit t)
+            (backward-char)
+            (when (looking-at "[^\\.]") (setq $pR (- $pR 1)))
+              (setq $exit t)
             )
         ;; Else-If the cursor begins on an operator.  ++  oaeu
         ;;
@@ -310,7 +310,7 @@
               (progn
                 ;; Move backwards to the end of the operator.
                 (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
-                (setq $pR (- $pR 1))
+                ;; (setq $pR (- $pR 1))
                 (setq $exit t)
             )
             ;; Else, increment cursor position.
