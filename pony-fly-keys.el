@@ -289,21 +289,28 @@
   (interactive)
   (let ($pR)
     (setq $exit nil)
+    (forward-char)
     (while (not $exit)
     ;; If the cursor begins on a word.
     ;;
       (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
           (progn
+            (forward-char)
             (setq $pR (pony-re-search-forward "[^-_a-zA-Z0-9\$\#][^\\.]"))
+            (setq $pR (- $pR 2))
+            ;; Prevent ending on brackets or white-space.
+            ;; (backward-char)
+            (when (looking-at "\s(\s)\s-\\. ") (setq $pR (- $pR 1)))
             (setq $exit t)
             )
-        ;; Else-If the cursor begins on an operator.
+        ;; Else-If the cursor begins on an operator.  ++  oaeu
         ;;
         (progn
           (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
               (progn
                 ;; Move backwards to the end of the operator.
                 (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $pR (- $pR 1))
                 (setq $exit t)
             )
             ;; Else, increment cursor position.
