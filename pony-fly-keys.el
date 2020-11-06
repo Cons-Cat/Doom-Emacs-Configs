@@ -195,8 +195,50 @@
         )
       )
     ;;
-    ;; (goto-char $pL)
-    ;; (set-mark $pR)
     (delete-region $pL $pR)
+    )
+  )
+
+(defun pony-move-left-word()
+  (interactive)
+  (let ($pL)
+    (setq $exit nil)
+    (backward-char)
+    (while (not $exit)
+    ;; If the cursor begins on a word.
+    ;;
+      (if (looking-at "[-_a-zA-Z0-9\$\#\.]+")
+          (progn
+            ;; (backward-char)
+            (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#][^\\.]"))
+            ;; Move cursor beyond . symbol.
+            (backward-char)
+            (if (looking-at "\\.") (setq $pL (- $pL 1)))
+            ;; Prevent ending on brackets or white-space.
+            (when (looking-at "\s(\s)\s- ") (setq $pL (+ $pL 1)))
+            (setq $exit t)
+            )
+        ;; Else-If the cursor begins on an operator.
+        ;;
+        (progn
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
+              (progn
+                ;; Move backwards to the end of the operator.
+                (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
+                (setq $exit t)
+            )
+            ;; Else, decrement cursor position.
+            (progn
+              (if (equal (point) (point-min))
+                  (user-error "Error. Hit start of buffer."))
+              (backward-char)
+              )
+            )
+          )
+        )
+      )
+    ;;
+    (goto-char $pL)
+    ;; (set-mark $pR)
     )
   )
