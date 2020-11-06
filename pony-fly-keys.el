@@ -133,9 +133,9 @@
 
 (defun pony-re-search-backward (argRegex)
   (re-search-backward argRegex)
-  (if (looking-at "[\s\[\{\(\)\}\]]*")
+  ;; (if (looking-at "[\s\[\{\(\)\}\]]")
       (forward-char)
-    )
+    ;; )
   (point)
   )
 
@@ -157,24 +157,35 @@
             (goto-char temp)
             (setq $pL (pony-re-search-backward "[^-_a-zA-Z0-9\$\#]+[^\.]"))
             (message "WORD")
+            ;; Prevent ending on brackets.
+            (when (looking-at "[\s(\s)]") (setq $pL (+ $pL 1)))
             )
         ;; Else-If the cursor begins on an operator.
         ;;
         (progn
-          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,]+")
+          (if (looking-at "[\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]+")
               (progn
-                (message "OPERATOR")
                 ;; Move backwards to the end of the word.
                 (setq temp (point))
                 ;; (backward-char)
-                (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,]"))
+                (setq $pR (pony-re-search-forward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]"))
                 (goto-char temp)
-                ;; (forward-char) =++=  ()
-                (setq $pL (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,]"))
+                ;; ((forward-char[])) =++=      () [{]{]}]]]]
+                (setq $pL (- (pony-re-search-backward "[^\+\-\=\*\/\:\^\?\;\.\,\|\&\%\~]") 0))
+                ;; (setq $pL (+ $pL 1))
                 )
-            ;; Else
+            ;; Else if the cursor starts on brackets
             (progn
-              (message "NO")
+              (setq temp (point))
+              (setq $pR (pony-re-search-forward "[a-zA-Z0-9\s\n]*"))
+              ;; (setq $pR (- $pR 1))
+             ;; (setq $pR (pony-re-search-forward "[^[\s(\s/\s)]]"))
+               (goto-char temp)
+              ;; () (setq $pL (pony-re-search-backward "[^\[\(\{\}\)\]\+]"))
+              ;; (setq $pL (pony-re-search-backward "[^[\s(\s/\s)]]"))
+               (setq $pL (pony-re-search-backward "[a-zA-Z0-9\s]+"))
+               ;; (setq $pL (+ $pL 1))
+               (message "NO")
               )
             )
           )
