@@ -20,6 +20,10 @@
   "Name of the buffer where GMTree shows project contents."
   )
 
+(cl-defstruct gmnode text child parent)
+
+(defvar gmtree-node-list (list "Head" '(2 3 4)))
+
 (defcustom gmtree-dock-side 'right
   "The side to dock the GMTree window to."
   :group 'gmtree

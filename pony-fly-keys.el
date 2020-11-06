@@ -201,7 +201,7 @@
     )
   )
 
-(defun pony-move-left-word()
+(defun pony-move-left-word ()
   (interactive)
   (let ($pL)
     (setq $exit nil)
@@ -286,7 +286,7 @@
     )
   )
 
-(defun pony-move-right-word()
+(defun pony-move-right-word ()
   (interactive)
   (let ($pR)
     (setq $exit nil)

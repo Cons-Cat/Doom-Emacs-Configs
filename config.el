@@ -8,6 +8,9 @@
  tab-width 3
  x-stretch-cursor t
  electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit
+ ;;
+ ;; evil-surround-pairs-alist
+ ;; (push '(?h . ("{" . "}")) evil-surround-pairs-alist)
  )
 
 (display-time-mode t)
@@ -305,10 +308,16 @@
     (kbd "'") 'xah-comment-dwim
     (kbd "f") 'evil-undo
     (kbd "F") 'evil-redo
-    (kbd "O") 'evil-join
-    (kbd "o") 'evil-insert-newline-below
+    ;; (kbd "O") 'evil-join
+    ;; (kbd "o") 'evil-insert-newline-below
     (kbd ";") 'evil-record-macro
     )
+
+  ;; ;; (evil-declare-key 'visual operator-)
+  ;; ;;
+  ;; (evil-declare-key 'visual evil-operator-state-map
+  ;;   (kbd "oh") 'xah-insert-paren
+  ;;   )
 
   (evil-declare-key 'visual global-map
     ;; Modes
@@ -378,15 +387,6 @@
   (map! :leader "tC" 'zz-scroll-half-page-up)
   (map! :leader "tu" 'evil-scroll-line-to-center)
   (map! :leader "te" 'move-to-window-line-top-bottom)
-
-  ;; Embracing
-  (map! :leader "eh" 'xah-insert-brace)
-  (map! :leader "et" 'xah-insert-paren)
-  (map! :leader "en" 'xah-insert-square-bracket)
-  (map! :leader "eg" 'xah-insert-ascii-double-quote)
-  (map! :leader "ec" 'xah-insert-ascii-single-quote)
-  (map! :leader "er" 'pony-insert-region-pair)
-  ;; (map! :leader "el" 'xah-insert-angle-bracket) ; These are not <> brackets.
 
   ;; File Commands
   (map! :leader "ca" 'magit-status)
